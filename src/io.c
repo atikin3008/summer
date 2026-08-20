@@ -1,4 +1,4 @@
-#include "types.h"
+#include "../include/types.h"
 #include <stdio.h>
 
 enum Read read(double *a, double *b, double *c) {

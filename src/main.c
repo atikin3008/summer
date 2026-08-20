@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "types.h"
-#include "io.h"
-#include "solve.h"
+#include "../include/types.h"
+#include "../include/io.h"
+#include "../include/solve.h"
 
 
 
