@@ -23,7 +23,7 @@ enum RootType {
     ANY_ROOT = 3
 };
 
-bool eqDouble(double a, double b, double EPS){
+bool eqDouble(double a, double b, double EPS) {
     return fabsl(a - b) <= EPS;
 }
 
@@ -111,7 +111,7 @@ enum Read read(double *a, double *b, double *c) {
         while (getchar() != '\n');
         while (is_read != 1) {
             fail_count++;
-            if (fail_count >= 5){
+            if (fail_count >= 5) {
                 return FAIL;
             }
             printf("Введите повторно %c: ", letters[letter]);
@@ -121,22 +121,28 @@ enum Read read(double *a, double *b, double *c) {
     }
     return DONE;
 }
-void print(enum RootType rootType, double x1, double x2){
-    if (rootType == ZERO_ROOT) {
-        printf("Корней нет!\n");
-    } else if (rootType == ONE_ROOT) {
-        printf("Уравнение имеет один корень: %lg", x1);
-    } else if (rootType == TWO_ROOT) {
-        printf("Уравнение имеет два корня: %lg %lg", x1, x2);
-    } else {
-        printf("Корнем уравнения является любое число");
+
+void print(enum RootType rootType, double x1, double x2) {
+    switch (rootType) {
+        case ZERO_ROOT:
+            printf("Корней нет!\n");
+            break;
+        case ONE_ROOT:
+            printf("Уравнение имеет один корень: %lg", x1);
+            break;
+        case TWO_ROOT:
+            printf("Уравнение имеет два корня: %lg %lg", x1, x2);
+            break;
+        default:
+            printf("Корнем уравнения является любое число");
+            break;
     }
 }
 
 
 int main(void) {
     double a = 0, b = 0, c = 0;
-    if (read(&a, &b, &c) == FAIL){
+    if (read(&a, &b, &c) == FAIL) {
         printf("ОШИБКА ВВОДА!\n");
         return 1;
     }
