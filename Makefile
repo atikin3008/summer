@@ -1,28 +1,32 @@
 TARGET = build/exe
-SRC = build/main.o build/io.o build/solve.o
+GCCFLAGS = --std=c23 -Wall -Wextra -fsanitize=address
+CC = GCC
 
-.PHONY: all clean
+SRCS = $(wildcard src/*.c)
 
-all: $(TARGET)
-	$(TARGET)
 
-build:
+
+.PHONY: all clean build
+
+all: run
+
+run: build
+	./$(TARGET)
+
+build: build_dir $(SRCS)
+	$(CC) $(wildcard build/*.o) $(GCCFLAGS) -o $(TARGET)
+
+
+src/%.c:
+	$(CC) -c -o build/$*.o $(GCCFLAGS) $@
+
+
+build_dir:
 	mkdir -p build
-
-build/main.o: src/main.c build
-	gcc -c --std=c23 -Wall -Wextra -fsanitize=address -o build/main.o src/main.c
-
-build/io.o: src/io.c build
-	gcc -c --std=c23 -Wall -Wextra -fsanitize=address -o build/io.o src/io.c
-
-build/solve.o: src/solve.c build
-	gcc -c --std=c23 -Wall -Wextra -fsanitize=address -o build/solve.o src/solve.c
-
-$(TARGET) : $(SRC)
-	gcc --std=c23 -Wall -Wextra -fsanitize=address -o $(TARGET) $(SRC)
 
 clean:
 	rm -rf build/*
+
 
 
 
