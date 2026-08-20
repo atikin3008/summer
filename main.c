@@ -1,6 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+
+double EPS = 1e-3;
+
 
 enum EquationType {
     // Тип уравнения
@@ -23,14 +27,14 @@ enum RootType {
     ANY_ROOT = 3
 };
 
-bool eqDouble(double a, double b, double EPS) {
+bool eqDouble(double a, double b) {
     return fabsl(a - b) <= EPS;
 }
 
 enum EquationType getEquationType(double a, double b, double c) {
-    if (eqDouble(a, 0, 1e-3)) {
-        if (eqDouble(b, 0, 1e-3)) {
-            if (eqDouble(c, 0, 1e-3)) {
+    if (eqDouble(a, 0)) {
+        if (eqDouble(b, 0)) {
+            if (eqDouble(c, 0)) {
                 return ANY_NUMBER;
             }
             return NO_ROOTS; // c != 0
@@ -46,21 +50,21 @@ double solveLinearEquation(double b, double c) {
     return -c / b;
 }
 
-double getDiscreminant(double a, double b, double c) {
+double getDiscriminant(double a, double b, double c) {
     return b * b - 4 * a * c;
 }
 
 
+/**
+ * @brief Решает любые уравнения до 2 степени
+ * @param a Коэффициент уравнения a
+ * @param b Коэффициент уравнения b
+ * @param c Коэффициент уравнения c
+ * @param x1 Указатель на первый корень уравнения
+ * @param x2 Указатель на второй корень уравнения
+ * @return Количество корней уравнения
+ */
 enum RootType solveSquareEquation(double a, double b, double c, double *x1, double *x2) {
-    /*
-     * @brief Решает любые уравнения до 2 степени
-     * @param a Коэффициент уравнения a
-     * @param b Коэффициент уравнения b
-     * @param c Коэффициент уравнения c
-     * @param x1 Указатель на первый корень уравнения
-     * @param x2 Указатель на второй корень уравнения
-     * @return Количество корней уравнения
-     */
 
     assert(isfinite(a) && !isnan(a));
     assert(isfinite(b) && !isnan(b));
@@ -86,14 +90,14 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
         return ONE_ROOT;
     }
 
-    double discriminant = getDiscreminant(a, b, c);
+    double discriminant = getDiscriminant(a, b, c);
 
     if (discriminant > 0) {
         *x1 = (b + sqrt(discriminant)) / (2 * a);
         *x2 = (b - sqrt(discriminant)) / (2 * a);
         return TWO_ROOT;
     }
-    if (eqDouble(discriminant, 0, 1e-3)) {
+    if (eqDouble(discriminant, 0)) {
         *x1 = b / (2 * a);
         return ONE_ROOT;
     }
@@ -108,7 +112,7 @@ enum Read read(double *a, double *b, double *c) {
         printf("Введите %c: ", letters[letter]);
         int is_read = scanf("%lg", variables[letter]);
         int fail_count = 0;
-        while (getchar() != '\n');
+        while (getchar() != '\n') {}
         while (is_read != 1) {
             fail_count++;
             if (fail_count >= 5) {
@@ -140,7 +144,11 @@ void print(enum RootType rootType, double x1, double x2) {
 }
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    if (argc == 2) {
+        char *endpointer = nullptr;
+        EPS = strtod(argv[1], &endpointer);
+    }
     double a = 0, b = 0, c = 0;
     if (read(&a, &b, &c) == FAIL) {
         printf("ОШИБКА ВВОДА!\n");
