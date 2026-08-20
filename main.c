@@ -4,25 +4,33 @@
 
 enum EquationType {
     // Тип уравнения
-    ANY_NUMBER, // Корнем является любое число
-    NO_ROOTS, // Нет корней
-    LINEAR_EQUATION, // Линейное уравнение
-    SQUARE_EQUATION // Квадратное уравнение
+    ANY_NUMBER = 0, // Корнем является любое число
+    NO_ROOTS = 1, // Нет корней
+    LINEAR_EQUATION = 2, // Линейное уравнение
+    SQUARE_EQUATION = 3 // Квадратное уравнение
+};
+
+enum Read {
+    DONE = 0,
+    FAIL = 1
 };
 
 enum RootType {
     // Количество корней и их тип
-    ZERO_ROOT,
-    ONE_ROOT,
-    TWO_ROOT,
-    ANY_ROOT
+    ZERO_ROOT = 0,
+    ONE_ROOT = 1,
+    TWO_ROOT = 2,
+    ANY_ROOT = 3
 };
 
+bool eqDouble(double a, double b, double EPS){
+    return fabsl(a - b) <= EPS;
+}
 
 enum EquationType getEquationType(double a, double b, double c) {
-    if (a == 0.) {
-        if (b == 0.) {
-            if (c == 0.) {
+    if (eqDouble(a, 0, 1e-3)) {
+        if (eqDouble(b, 0, 1e-3)) {
+            if (eqDouble(c, 0, 1e-3)) {
                 return ANY_NUMBER;
             }
             return NO_ROOTS; // c != 0
@@ -54,9 +62,9 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
      * @return Количество корней уравнения
      */
 
-    assert(isfinite(a));
-    assert(isfinite(b));
-    assert(isfinite(c));
+    assert(isfinite(a) && !isnan(a));
+    assert(isfinite(b) && !isnan(b));
+    assert(isfinite(c) && !isnan(c));
 
 
     enum EquationType type = getEquationType(a, b, c);
@@ -85,28 +93,33 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
         *x2 = (b - sqrt(discriminant)) / (2 * a);
         return TWO_ROOT;
     }
-    if (discriminant == 0.) {
+    if (eqDouble(discriminant, 0, 1e-3)) {
         *x1 = b / (2 * a);
         return ONE_ROOT;
     }
     return ZERO_ROOT;
 }
 
-void read(double *a, double *b, double *c) {
+enum Read read(double *a, double *b, double *c) {
     printf("Прогама решающая квадратное уравнение\n\n");
     char letters[] = "abc";
     double *variables[] = {a, b, c};
     for (int letter = 0; letter < 3; ++letter) {
         printf("Введите %c: ", letters[letter]);
         int is_read = scanf("%lg", variables[letter]);
+        int fail_count = 0;
         while (getchar() != '\n');
         while (is_read != 1) {
+            fail_count++;
+            if (fail_count >= 5){
+                return FAIL;
+            }
             printf("Введите повторно %c: ", letters[letter]);
             is_read = scanf("%lg", variables[letter]);
             while (getchar() != '\n');
         }
     }
-
+    return DONE;
 }
 void print(enum RootType rootType, double x1, double x2){
     if (rootType == ZERO_ROOT) {
@@ -123,7 +136,10 @@ void print(enum RootType rootType, double x1, double x2){
 
 int main(void) {
     double a = 0, b = 0, c = 0;
-    read(&a, &b, &c);
+    if (read(&a, &b, &c) == FAIL){
+        printf("ОШИБКА ВВОДА!\n");
+        return 1;
+    }
     double x1, x2;
     enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
     print(rootType, x1, x2);
