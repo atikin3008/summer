@@ -20,9 +20,9 @@ enum RootType {
 
 
 enum EquationType getEquationType(double a, double b, double c) {
-    if (a == 0) {
-        if (b == 0) {
-            if (c == 0) {
+    if (a == 0.) {
+        if (b == 0.) {
+            if (c == 0.) {
                 return ANY_NUMBER;
             }
             return NO_ROOTS; // c != 0
@@ -85,30 +85,46 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
         *x2 = (b - sqrt(discriminant)) / (2 * a);
         return TWO_ROOT;
     }
-    if (discriminant == 0) {
+    if (discriminant == 0.) {
         *x1 = b / (2 * a);
         return ONE_ROOT;
     }
     return ZERO_ROOT;
 }
 
-int main(void) {
-    printf("Прогама решающая квадратное уравнение\n\n"); // TODOb func
-    printf("Введите a, b, c: ");
-    double a = 0, b = 0, c = 0;
-    scanf("%lg %lg %lg", &a, &b, &c);
-    double x1, x2;
-
-    enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
-
-    if (rootType == ZERO_ROOT){
-        printf("Корней нет!\n");
-    }else if(rootType == ONE_ROOT){
-        printf("Уравнение имеет один корень: %lg", x1);
-    }else if(rootType == TWO_ROOT){
-        printf("Уравнение имеет два корня: %lg %lg", x1, x2);
-    }else{
-        printf("Корнем уравнения является любое число");
+void read(double *a, double *b, double *c) {
+    printf("Прогама решающая квадратное уравнение\n\n");
+    char letters[] = "abc";
+    double *variables[] = {a, b, c};
+    for (int letter = 0; letter < 3; ++letter) {
+        printf("Введите %c: ", letters[letter]);
+        int is_read = scanf("%lg", variables[letter]);
+        while (getchar() != '\n');
+        while (is_read != 1) {
+            printf("Введите повторно %c: ", letters[letter]);
+            is_read = scanf("%lg", variables[letter]);
+            while (getchar() != '\n');
+        }
     }
 
+}
+void print(enum RootType rootType, double x1, double x2){
+    if (rootType == ZERO_ROOT) {
+        printf("Корней нет!\n");
+    } else if (rootType == ONE_ROOT) {
+        printf("Уравнение имеет один корень: %lg", x1);
+    } else if (rootType == TWO_ROOT) {
+        printf("Уравнение имеет два корня: %lg %lg", x1, x2);
+    } else {
+        printf("Корнем уравнения является любое число");
+    }
+}
+
+
+int main(void) {
+    double a = 0, b = 0, c = 0;
+    read(&a, &b, &c);
+    double x1, x2;
+    enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
+    print(rootType, x1, x2);
 }
