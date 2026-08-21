@@ -8,23 +8,23 @@ bool eqDouble(double a, double b) {
     return fabsl(a - b) <= EPS;
 }
 
-enum EquationType getEquationType(double a, double b, double c) {
-    if (eqDouble(a, 0)) {
-        if (eqDouble(b, 0)) {
-            if (eqDouble(c, 0)) {
-                return ANY_NUMBER;
-            }
-            return NO_ROOTS; // c != 0
-        } else { // b != 0
-            return LINEAR_EQUATION;
-        }
-    } else { // a != 0
-        return SQUARE_EQUATION;
-    }
+enum EquationType getEquationType(double b, double c) {
+    if (eqDouble(b, 0)) {
+        if (eqDouble(c, 0)) return ANY_NUMBER;
+        return NO_ROOTS; // c != 0
+    } else return LINEAR_EQUATION; // b != 0
 }
 
-double solveLinearEquation(double b, double c) {
-    return -c / b;
+enum RootType solveLinearEquation(double b, double c, double *x) {
+    enum EquationType equationType = getEquationType(b, c);
+    if (equationType == LINEAR_EQUATION) {
+        *x = -c / b;
+        return ONE_ROOT;
+    }
+    if (equationType == ANY_NUMBER) {
+        return ANY_ROOT;
+    }
+    return ZERO_ROOT;
 }
 
 double getDiscriminant(double a, double b, double c) {
@@ -43,29 +43,15 @@ double getDiscriminant(double a, double b, double c) {
  */
 enum RootType solveSquareEquation(double a, double b, double c, double *x1, double *x2) {
 
-    assert(isfinite(a) && !isnan(a));
-    assert(isfinite(b) && !isnan(b));
-    assert(isfinite(c) && !isnan(c));
+    assert(isfinite(a));
+    assert(isfinite(b));
+    assert(isfinite(c));
+    assert(x1);
+    assert(x2);
 
 
-    enum EquationType type = getEquationType(a, b, c);
+    if (eqDouble(a, 0)) return solveLinearEquation(b, c, x1);
 
-    if (type == NO_ROOTS) {
-        x1 = nullptr;
-        x2 = nullptr;
-        return ZERO_ROOT;
-    }
-
-    if (type == ANY_NUMBER) {
-        x1 = nullptr;
-        x2 = nullptr;
-        return ANY_ROOT;
-    }
-
-    if (type == LINEAR_EQUATION) {
-        (*x1) = solveLinearEquation(b, c);
-        return ONE_ROOT;
-    }
 
     double discriminant = getDiscriminant(a, b, c);
 

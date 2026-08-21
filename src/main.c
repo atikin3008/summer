@@ -4,33 +4,34 @@
 #include "../include/io.h"
 #include "../include/solve.h"
 
-int solveFIN();
-int solveCIN();
+int solveFIN(struct InputSettings inputSettings);
+int solveCIN(struct InputSettings inputSettings);
 
 
 int main(int argc, char *argv[]) {
-    enum TypeRead typeRead = getArgs(argc, argv);
-    if (typeRead == FIN){
-        return solveFIN();
-    }else{
-        return solveCIN();
+    struct InputSettings inputSettings = getArgs(argc, argv);
+    if (inputSettings.typeRead == FIN){
+        return solveFIN(inputSettings);
+    }else if(inputSettings.typeRead == CIN){
+        return solveCIN(inputSettings);
     }
+    return inputSettings.typeRead;
 }
 
-int solveFIN() {
+int solveFIN(struct InputSettings inputSettings) {
     while (true) {
         double a, b, c;
-        enum Read e = readFileString(&a, &b, &c);
+        enum Read e = readFileString(&a, &b, &c, inputSettings);
         if (e == END) {
-            closeFiles();
+            closeFiles(inputSettings);
             return 0;
         }else if (e == FAIL){
-            closeFiles();
+            closeFiles(inputSettings);
             return 1;
         }else if(e == DONE){
             double x1, x2;
             enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
-            print(rootType, x1, x2);
+            print(rootType, x1, x2, inputSettings);
         }
 
 
@@ -38,7 +39,7 @@ int solveFIN() {
 }
 
 
-int solveCIN() {
+int solveCIN(struct InputSettings inputSettings) {
     double a = 0, b = 0, c = 0;
     if (readDouble(&a, 'a') == FAIL || readDouble(&b, 'b') == FAIL || readDouble(&c, 'c') == FAIL) {
         printf("ОШИБКА ВВОДА!\n");
@@ -46,7 +47,7 @@ int solveCIN() {
     }
     double x1, x2;
     enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
-    print(rootType, x1, x2);
-    closeFiles();
+    print(rootType, x1, x2, inputSettings);
+    closeFiles(inputSettings);
     return 0;
 }

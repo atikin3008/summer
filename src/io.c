@@ -4,22 +4,20 @@
 #include <stdlib.h>
 #include "../include/solve.h"
 
-FILE *input = nullptr;
-FILE *output = nullptr;
 
-void closeFiles() {
-    if (input) {
-        fclose(input);
+void closeFiles(struct InputSettings inputSettings) {
+    if (inputSettings.input) {
+        fclose(inputSettings.input);
     }
-    if (output) {
-        fclose(output);
+    if (inputSettings.output) {
+        fclose(inputSettings.output);
     }
 }
 
-enum Read readFileString(double *a, double *b, double *c) {
-    int correct = fscanf(input, "%lg %lg %lg\n", a, b, c);
+enum Read readFileString(double *a, double *b, double *c, struct InputSettings inputSettings) {
+    int correct = fscanf(inputSettings.input, "%lg %lg %lg\n", a, b, c);
     if (correct == -1) {
-        closeFiles();
+        closeFiles(inputSettings);
         return END;
     } else if (correct == 3) {
         return DONE;
@@ -27,19 +25,19 @@ enum Read readFileString(double *a, double *b, double *c) {
     return FAIL;
 }
 
-void printFile(enum RootType rootType, double x1, double x2) {
+void printFile(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings) {
     switch (rootType) {
         case ZERO_ROOT:
-            fprintf(output, "None\n");
+            fprintf(inputSettings.output, "None\n");
             break;
         case ONE_ROOT:
-            fprintf(output, "%lg\n", x1);
+            fprintf(inputSettings.output, "%lg\n", x1);
             break;
         case TWO_ROOT:
-            fprintf(output, "%lg %lg\n", x1, x2);
+            fprintf(inputSettings.output, "%lg %lg\n", x1, x2);
             break;
         case ANY_ROOT:
-            fprintf(output, "Any\n");
+            fprintf(inputSettings.output, "Any\n");
             break;
     }
 }
@@ -81,17 +79,20 @@ void printCIN(enum RootType rootType, double x1, double x2) {
     }
 }
 
-void print(enum RootType rootType, double x1, double x2) {
-    if (output) {
-        printFile(rootType, x1, x2);
+void print(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings) {
+    if (inputSettings.output) {
+        printFile(rootType, x1, x2, inputSettings);
     } else {
         printCIN(rootType, x1, x2);
     }
 }
 
 
-enum TypeRead getArgs(int argc, char *argv[]) {
-    enum TypeRead typeRead = CIN;
+struct InputSettings getArgs(int argc, char *argv[]) {
+    struct InputSettings inputSettings;
+    inputSettings.typeRead = CIN;
+    inputSettings.input = nullptr;
+    inputSettings.output = nullptr;
     for (int argi = 1; argi < argc; ++argi) {
         char *current = argv[argi];
         char *var = nullptr;
@@ -104,29 +105,33 @@ enum TypeRead getArgs(int argc, char *argv[]) {
         }
         if (var == nullptr) {
             printf("Неправильный аргумент: %s\n", current);
-            return ERR;
+            inputSettings.typeRead = ERR;
+            return inputSettings;
         }
         if (strcmp(current, "--input") == 0) {
-            input = fopen(var, "r");
-            if (!input) {
+            inputSettings.input = fopen(var, "r");
+            if (!inputSettings.input) {
                 printf("Файл недоступен: %s\n", var);
-                return ERR;
+                inputSettings.typeRead = ERR;
+                return inputSettings;
             }
-            typeRead = FIN;
+            inputSettings.typeRead = FIN;
         } else if (strcmp(current, "--output") == 0) {
-            output = fopen(var, "w");
+            inputSettings.output = fopen(var, "w");
         } else if (strcmp(current, "--eps") == 0) {
             char **end = NULL;
             EPS = strtod(var, end);
             if (*end == var) {
                 printf("Ошибка EPS: %s", var);
-                return ERR;
+                inputSettings.typeRead = ERR;
+                return inputSettings;
             }
         } else {
             printf("Ошибка аргумента: %s", current);
-            return ERR;
+            inputSettings.typeRead = ERR;
+            return inputSettings;
         }
     }
-    return typeRead;
+    return inputSettings;
 }
 

@@ -7,6 +7,8 @@
 
 enum RootType solveSquareEquation(double a, double b, double c, double *x1, double *x2);
 
+enum RootType solveLinearEquation(double b, double c, double *x);
+
 extern double EPS;
 
 #endif //SQUARE_EQUATION_SOLVER_SOLVE_H

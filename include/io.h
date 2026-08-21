@@ -7,12 +7,14 @@
 
 enum Read readDouble(double *a, char c);
 
-void print(enum RootType rootType, double x1, double x2);
+void print(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings);
 
-enum Read readFileString(double *a, double *b, double *c);
+void printFile(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings);
 
-void closeFiles();
+enum Read readFileString(double *a, double *b, double *c, struct InputSettings inputSettings);
 
-enum TypeRead getArgs(int argc, char* argv[]);
+void closeFiles(struct InputSettings inputSettings);
+
+struct InputSettings getArgs(int argc, char* argv[]);
 
 #endif //SQUARE_EQUATION_SOLVER_IO_H

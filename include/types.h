@@ -4,7 +4,7 @@
 
 #ifndef SQUARE_EQUATION_SOLVER_TYPES_H
 #define SQUARE_EQUATION_SOLVER_TYPES_H
-
+#include <stdio.h>
 
 
 
@@ -35,6 +35,13 @@ enum TypeRead {
     CIN = 0,
     FIN = 1,
     ERR = 2
+};
+
+
+struct InputSettings {
+    FILE* input;
+    FILE* output;
+    enum TypeRead typeRead;
 };
 
 

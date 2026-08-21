@@ -1,6 +1,6 @@
 TARGET = build/exe
 GCCFLAGS = --std=c23 -Wall -Wextra -fsanitize=address
-CC = GCC
+CC = clang
 
 SRCS = $(wildcard src/*.c)
 
@@ -24,7 +24,7 @@ build_dir:
 	mkdir -p build
 
 clean:
-	rm -rf build/*
+	rm -rf build
 
 
 
