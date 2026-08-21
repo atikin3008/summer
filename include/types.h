@@ -19,7 +19,8 @@ enum EquationType {
 
 enum Read {
     DONE = 0,
-    FAIL = 1
+    FAIL = 1,
+    END = 2
 };
 
 enum RootType {
@@ -29,5 +30,13 @@ enum RootType {
     TWO_ROOT = 2,
     ANY_ROOT = 3
 };
+
+enum TypeRead {
+    CIN = 0,
+    FIN = 1,
+    ERR = 2
+};
+
+
 
 #endif //SQUARE_EQUATION_SOLVER_TYPES_H

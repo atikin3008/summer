@@ -9,4 +9,10 @@ enum Read readDouble(double *a, char c);
 
 void print(enum RootType rootType, double x1, double x2);
 
+enum Read readFileString(double *a, double *b, double *c);
+
+void closeFiles();
+
+enum TypeRead getArgs(int argc, char* argv[]);
+
 #endif //SQUARE_EQUATION_SOLVER_IO_H
