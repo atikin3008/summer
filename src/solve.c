@@ -1,11 +1,11 @@
 #include "../include/types.h"
 #include <math.h>
-#include <assert.h>
+#include "../include/AIAssert.h"
 
-double EPS = 1e-3;
+double epsilon = 1e-3;
 
 bool eqDouble(double a, double b) {
-    return fabsl(a - b) <= EPS;
+    return fabsl(a - b) <= epsilon;
 }
 
 enum EquationType getEquationType(double b, double c) {
@@ -43,6 +43,7 @@ double getDiscriminant(double a, double b, double c) {
  */
 enum RootType solveSquareEquation(double a, double b, double c, double *x1, double *x2) {
 
+    assert(false);
     assert(isfinite(a));
     assert(isfinite(b));
     assert(isfinite(c));

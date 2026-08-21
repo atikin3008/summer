@@ -7,7 +7,7 @@
 
 enum Read readDouble(double *a, char c);
 
-void print(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings);
+void printAnswer(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings);
 
 void printFile(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings);
 

@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
 int solveFIN(struct InputSettings inputSettings) {
     while (true) {
-        double a, b, c;
+        double a = 0, b = 0, c = 0;
         enum Read e = readFileString(&a, &b, &c, inputSettings);
         if (e == END) {
             closeFiles(inputSettings);
@@ -31,7 +31,7 @@ int solveFIN(struct InputSettings inputSettings) {
         }else if(e == DONE){
             double x1, x2;
             enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
-            print(rootType, x1, x2, inputSettings);
+            printAnswer(rootType, x1, x2, inputSettings);
         }
 
 
@@ -47,7 +47,7 @@ int solveCIN(struct InputSettings inputSettings) {
     }
     double x1, x2;
     enum RootType rootType = solveSquareEquation(a, b, c, &x1, &x2);
-    print(rootType, x1, x2, inputSettings);
+    printAnswer(rootType, x1, x2, inputSettings);
     closeFiles(inputSettings);
     return 0;
 }

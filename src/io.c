@@ -45,7 +45,7 @@ void printFile(enum RootType rootType, double x1, double x2, struct InputSetting
 
 
 enum Read readDouble(double *a, char c) {
-    printf("Прогама решающая квадратное уравнение\n\n");
+    printf("Программа решающая квадратное уравнение\n\n");
     printf("Введите %c: ", c);
     int is_read = scanf("%lg", a);
     int fail_count = 0;
@@ -62,7 +62,7 @@ enum Read readDouble(double *a, char c) {
     return DONE;
 }
 
-void printCIN(enum RootType rootType, double x1, double x2) {
+void printConsole(enum RootType rootType, double x1, double x2) {
     switch (rootType) {
         case ZERO_ROOT:
             printf("Корней нет!\n");
@@ -79,24 +79,22 @@ void printCIN(enum RootType rootType, double x1, double x2) {
     }
 }
 
-void print(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings) {
+void printAnswer(enum RootType rootType, double x1, double x2, struct InputSettings inputSettings) {
     if (inputSettings.output) {
         printFile(rootType, x1, x2, inputSettings);
     } else {
-        printCIN(rootType, x1, x2);
+        printConsole(rootType, x1, x2);
     }
 }
 
 
 struct InputSettings getArgs(int argc, char *argv[]) {
-    struct InputSettings inputSettings;
-    inputSettings.typeRead = CIN;
-    inputSettings.input = nullptr;
-    inputSettings.output = nullptr;
+    struct InputSettings inputSettings = {nullptr, nullptr, CIN};
     for (int argi = 1; argi < argc; ++argi) {
         char *current = argv[argi];
         char *var = nullptr;
-        for (unsigned long i = 0; i < strlen(current); ++i) {
+        unsigned long len = strlen(current);
+        for (unsigned long i = 0; i < len; ++i) {
             if (current[i] == '=') {
                 current[i] = '\0';
                 var = &(current[i + 1]);
@@ -118,11 +116,11 @@ struct InputSettings getArgs(int argc, char *argv[]) {
             inputSettings.typeRead = FIN;
         } else if (strcmp(current, "--output") == 0) {
             inputSettings.output = fopen(var, "w");
-        } else if (strcmp(current, "--eps") == 0) {
-            char **end = NULL;
-            EPS = strtod(var, end);
+        } else if (strcmp(current, "--epsilon") == 0) {
+            char **end = nullptr;
+            epsilon = strtod(var, end);
             if (*end == var) {
-                printf("Ошибка EPS: %s", var);
+                printf("Ошибка epsilon: %s", var);
                 inputSettings.typeRead = ERR;
                 return inputSettings;
             }
