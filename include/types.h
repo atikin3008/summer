@@ -42,6 +42,7 @@ struct InputSettings {
     FILE* input;
     FILE* output;
     enum TypeRead typeRead;
+    bool gui;
 };
 
 

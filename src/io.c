@@ -45,7 +45,6 @@ void printFile(enum RootType rootType, double x1, double x2, struct InputSetting
 
 
 enum Read readDouble(double *a, char c) {
-    printf("Программа решающая квадратное уравнение\n\n");
     printf("Введите %c: ", c);
     int is_read = scanf("%lg", a);
     int fail_count = 0;
@@ -89,7 +88,7 @@ void printAnswer(enum RootType rootType, double x1, double x2, struct InputSetti
 
 
 struct InputSettings getArgs(int argc, char *argv[]) {
-    struct InputSettings inputSettings = {nullptr, nullptr, CIN};
+    struct InputSettings inputSettings = {nullptr, nullptr, CIN, false};
     for (int argi = 1; argi < argc; ++argi) {
         char *current = argv[argi];
         char *var = nullptr;
@@ -101,12 +100,14 @@ struct InputSettings getArgs(int argc, char *argv[]) {
                 break;
             }
         }
-        if (var == nullptr) {
+        if (var == nullptr && strcmp(current, "-gui") != 0) {
             printf("Неправильный аргумент: %s\n", current);
             inputSettings.typeRead = ERR;
             return inputSettings;
         }
-        if (strcmp(current, "--input") == 0) {
+        if (strcmp(current, "-gui") == 0){
+            inputSettings.gui = true;
+        }else if (strcmp(current, "--input") == 0) {
             inputSettings.input = fopen(var, "r");
             if (!inputSettings.input) {
                 printf("Файл недоступен: %s\n", var);
