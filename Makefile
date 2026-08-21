@@ -13,20 +13,18 @@ all: run
 run: build
 	./$(TARGET)
 
-build: build_dir $(SRCS)
-	$(CC) $(wildcard build/*.o) $(GCCFLAGS) -o $(TARGET)
+build: $(addprefix build/, $(notdir $(SRCS:.c=.o)))
+	$(CC) $^ $(GCCFLAGS) -o $(TARGET)
 
 
-src/%.c:
-	$(CC) -c -o build/$*.o $(GCCFLAGS) $@
-
+build/%.o: src/%.c build_dir
+	$(CC) -c -o $@ $(GCCFLAGS) $<
 
 build_dir:
 	mkdir -p build
 
 clean:
 	rm -rf build/*
-
 
 
 

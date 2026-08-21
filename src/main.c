@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
         EPS = strtod(argv[1], &endpointer);
     }
     double a = 0, b = 0, c = 0;
-    if (read(&a, &b, &c) == FAIL) {
+    if (readDouble(&a, 'a') == FAIL || readDouble(&b, 'b') == FAIL || readDouble(&c, 'c') == FAIL) {
         printf("ОШИБКА ВВОДА!\n");
         return 1;
     }
