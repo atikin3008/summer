@@ -57,12 +57,12 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
     double discriminant = getDiscriminant(a, b, c);
 
     if (discriminant > 0) {
-        *x1 = (b + sqrt(discriminant)) / (2 * a);
-        *x2 = (b - sqrt(discriminant)) / (2 * a);
+        *x1 = (-b + sqrt(discriminant)) / (2 * a);
+        *x2 = (-b - sqrt(discriminant)) / (2 * a);
         return TWO_ROOT;
     }
     if (eqDouble(discriminant, 0)) {
-        *x1 = b / (2 * a);
+        *x1 = -b / (2 * a);
         return ONE_ROOT;
     }
     return ZERO_ROOT;

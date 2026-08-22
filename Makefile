@@ -8,8 +8,18 @@ SRCS = $(wildcard src/*.c)
 
 
 
-.PHONY: all clean build test gui
+.PHONY: all clean build test gui unitest
 
+
+unitest: unitest_build
+	./unit_test/build/unittest
+
+unitest_build: unitest_dir_build
+	$(CC) $(GCCFLAGS) src/solve.c unit_test/unit_test.c -o unit_test/build/unittest
+
+
+unitest_dir_build:
+	mkdir -p unit_test/build
 
 all: run
 
