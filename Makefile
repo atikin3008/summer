@@ -8,49 +8,60 @@ SRCS = $(wildcard src/*.c)
 
 
 
-.PHONY: all clean build test gui unitest
-
-
-unitest: unitest_build
-	./unit_test/build/unittest
-
-unitest_build: unitest_dir_build
-	$(CC) $(GCCFLAGS) src/solve.c unit_test/unit_test.c -o unit_test/build/unittest
-
-
-unitest_dir_build:
-	mkdir -p unit_test/build
+.PHONY: all clean build test gui unit_test
 
 all: run
 
+unit_test: unitest_build
+	@./unit_test/build/unit_test
+
+unitest_build: unit_test_dir_build
+	@echo Сборка unittest
+	@$(CC) $(GCCFLAGS) src/solve.c unit_test/unit_test.c -o unit_test/build/unit_test
+
+
+unit_test_dir_build:
+	@echo Создание папки unit_test/build
+	@mkdir -p unit_test/build
+
+
+
 gui: build
-	./$(TARGET) --gui
+	@./$(TARGET) --gui
 
 test: build build_test
-	./test/build/exe
+	@./test/build/exe
 
 run: build
-	./$(TARGET)
+	@./$(TARGET)
 
 build: $(addprefix build/, $(notdir $(SRCS:.c=.o)))
-	$(CC) $^ $(GCCFLAGS) -o $(TARGET)
+	@echo Cборка исполняемого файлы
+	@$(CC) $^ $(GCCFLAGS) -o $(TARGET)
 
 
 build/%.o: src/%.c build_dir
-	$(CC) -c -o $@ $(GCCFLAGS) $<
+	@echo Сборка $@
+	@$(CC) -c -o $@ $(GCCFLAGS) $<
 
 build_dir:
-	mkdir -p build
+	@echo Создание папки build
+	@mkdir -p build
 
 clean:
-	rm -rf build
+	@echo Удаление папок
+	@rm -rf build
+	@rm -rf test/build
+	@rm -rf unit_test/build
 
 
 build_test: mkdir_build
-	$(CC) test/test.c $(GCCFLAGS) -o $(TEST_TARGET)
+	@echo Сборка тестов
+	@$(CC) test/test.c $(GCCFLAGS) -o $(TEST_TARGET)
 
 mkdir_build:
-	mkdir -p test/build
+	@echo Создание папки test/build
+	@mkdir -p test/build
 
 
 
