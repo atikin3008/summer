@@ -2,10 +2,10 @@
 #include <math.h>
 #include "../include/AIAssert.h"
 
-double epsilon = 1e-3;
+double EPSILON = 1e-3;
 
 bool eqDouble(double a, double b) {
-    return fabsl(a - b) <= epsilon;
+    return fabsl(a - b) <= EPSILON;
 }
 
 enum EquationType getEquationType(double b, double c) {

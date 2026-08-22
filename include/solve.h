@@ -9,6 +9,8 @@ enum RootType solveSquareEquation(double a, double b, double c, double *x1, doub
 
 enum RootType solveLinearEquation(double b, double c, double *x);
 
-extern double epsilon;
+bool eqDouble(double a, double b);
+
+extern double EPSILON;
 
 #endif //SQUARE_EQUATION_SOLVER_SOLVE_H

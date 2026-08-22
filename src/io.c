@@ -100,14 +100,17 @@ struct InputSettings getArgs(int argc, char *argv[]) {
                 break;
             }
         }
-        if (var == nullptr && strcmp(current, "-gui") != 0) {
-            printf("Неправильный аргумент: %s\n", current);
-            inputSettings.typeRead = ERR;
+        if (strcmp(current, "--help") == 0){
+            printf("--help показать этот текст\n"
+                   "--gui нарисовать график в CIN режиме\n"
+                   "--input=<Имя файла> изменение типа ввода с CIN в FIN + указания пути откуда читать\n"
+                   "--output=<Имя файла> указание пути вывода ответа\n"
+                   "--epsilon=<Точность> указание точности сравнение double\n");
+            inputSettings.typeRead = HELP;
             return inputSettings;
-        }
-        if (strcmp(current, "-gui") == 0){
+        }else if (strcmp(current, "--gui") == 0){
             inputSettings.gui = true;
-        }else if (strcmp(current, "--input") == 0) {
+        }else if (strcmp(current, "--input") == 0 && var != nullptr) {
             inputSettings.input = fopen(var, "r");
             if (!inputSettings.input) {
                 printf("Файл недоступен: %s\n", var);
@@ -115,11 +118,11 @@ struct InputSettings getArgs(int argc, char *argv[]) {
                 return inputSettings;
             }
             inputSettings.typeRead = FIN;
-        } else if (strcmp(current, "--output") == 0) {
+        } else if (strcmp(current, "--output") && var != nullptr == 0) {
             inputSettings.output = fopen(var, "w");
-        } else if (strcmp(current, "--epsilon") == 0) {
+        } else if (strcmp(current, "--epsilon") && var != nullptr == 0) {
             char **end = nullptr;
-            epsilon = strtod(var, end);
+            EPSILON = strtod(var, end);
             if (*end == var) {
                 printf("Ошибка epsilon: %s", var);
                 inputSettings.typeRead = ERR;

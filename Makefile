@@ -8,10 +8,13 @@ SRCS = $(wildcard src/*.c)
 
 
 
-.PHONY: all clean build test
+.PHONY: all clean build test gui
 
 
 all: run
+
+gui: build
+	./$(TARGET) --gui
 
 test: build build_test
 	./test/build/exe

@@ -17,11 +17,13 @@ int main() {
         printf("Программа не создала файл с ответом\n");
         return 0;
     }
+
     FILE *answer = fopen("test/answer.txt", "r");
     if (!answer) {
         printf("Файла с ответами для проверки нет!\n");
         return 0;
     }
+
     while (!feof(answer)) {
 
         char *out = calloc(101, sizeof(char));

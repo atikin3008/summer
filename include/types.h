@@ -34,7 +34,8 @@ enum RootType {
 enum TypeRead {
     CIN = 0,
     FIN = 1,
-    ERR = 2
+    ERR = 2,
+    HELP = -1
 };
 
 
